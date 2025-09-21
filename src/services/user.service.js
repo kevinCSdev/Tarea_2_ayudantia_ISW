@@ -1,4 +1,4 @@
-import { AppDataSource } from "../config/configDB.js";
+import { AppDataSource } from "../config/configDb.js";
 import { User } from "../entities/user.entity.js";
 import bcrypt from "bcrypt";
 
@@ -17,4 +17,19 @@ export async function createUser(data) {
 
 export async function findUserByEmail(email) {
   return await userRepository.findOneBy({ email });
+}
+
+export async function updateUserById(userId, updateData) {
+  const user = await userRepository.findOneBy({ id: userId });
+  if (!user) {
+    return null;
+  }
+
+  if (updateData.password) {
+    updateData.password = await bcrypt.hash(updateData.password, 10);
+  }
+
+  Object.assign(user, updateData);
+
+  return await userRepository.save(user);
 }
