@@ -1,5 +1,6 @@
 import { handleSuccess, handleErrorServer, handleErrorClient} from "../Handlers/responseHandlers.js";
 import { updateUserById } from "../services/user.service.js";
+import { deleteUserById } from "../services/user.service.js";
 
 export function getPublicProfile(req, res) {
   handleSuccess(res, 200, "Perfil público obtenido exitosamente", {
@@ -38,5 +39,23 @@ export async function updatePrivateProfile(req, res) {
 
   } catch (error) {
     handleErrorServer(res, 500, "Error al actualizar el perfil.", error);
+  }
+}
+
+//Eliminar perfil
+export async function deletePrivateProfile(req, res) {
+  try {
+    const userIdFromToken = req.userId;
+
+    const isDeleted = await deleteUserById(userIdFromToken);
+
+    if (!isDeleted) {
+      return handleErrorClient(res, 404, "Usuario no encontrado o ya ha sido eliminado.");
+    }
+
+    handleSuccess(res, 200, "Perfil eliminado exitosamente.");
+    
+  } catch (error) {
+    handleErrorServer(res, 500, "Error al eliminar el perfil.", error);
   }
 }

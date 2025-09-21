@@ -19,6 +19,7 @@ export async function findUserByEmail(email) {
   return await userRepository.findOneBy({ email });
 }
 
+//Modficar perfil
 export async function updateUserById(userId, updateData) {
   const user = await userRepository.findOneBy({ id: userId });
   if (!user) {
@@ -32,4 +33,17 @@ export async function updateUserById(userId, updateData) {
   Object.assign(user, updateData);
 
   return await userRepository.save(user);
+}
+
+//Eliminar perfil
+export async function deleteUserById(userId) {
+  const user = await userRepository.findOneBy({ id: userId });
+  
+  if (!user) {
+    return false;
+  }
+  
+  const result = await userRepository.delete(user.id);
+  
+  return result.affected > 0;
 }
