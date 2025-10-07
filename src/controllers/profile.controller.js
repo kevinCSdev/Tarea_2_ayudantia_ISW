@@ -20,6 +20,10 @@ export function getPrivateProfile(req, res) {
 //Modificar el perfil
 export async function updatePrivateProfile(req, res) {
   try {
+    const { error } = userBodyValidation.validate({ email, password });
+        if (error) {
+          return handleErrorClient(res, 400, "Parametros de consulta invalidos", error.message);
+        }
     const { email, password } = req.body;
     const userIdFromToken = req.userId; //Token del usuario
 

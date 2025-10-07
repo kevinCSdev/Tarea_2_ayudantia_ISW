@@ -1,10 +1,16 @@
 import { loginUser } from "../services/auth.service.js";
 import { createUser } from "../services/user.service.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../Handlers/responseHandlers.js";
+import { userBodyValidation } from "../../validations/user.validation.js";
 
 export async function login(req, res) {
   try {
     const { email, password } = req.body;
+
+    const { error } = userBodyValidation.validate({ email, password });
+    if (error) {
+      return handleErrorClient(res, 400, "Parametros de consulta invalidos", error.message);
+    }
     
     if (!email || !password) {
       return handleErrorClient(res, 400, "Email y contraseña son requeridos");
@@ -20,6 +26,11 @@ export async function login(req, res) {
 export async function register(req, res) {
   try {
     const data = req.body;
+
+    const { error } = userBodyValidation.validate(data);
+    if (error) {
+      return handleErrorClient(res, 400, "Parametros de consulta invalidos", error.message);
+    }
     
     if (!data.email || !data.password) {
       return handleErrorClient(res, 400, "Email y contraseña son requeridos");
