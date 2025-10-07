@@ -9,7 +9,7 @@ export const userBodyValidation = Joi.object({
     password: Joi.string()
     .min(4)
     .max(40)
-    .regex(new RegExp("^[a-zA-Z0-9]{4,40}$"))
+    .pattern(new RegExp("^[a-zA-Z0-9]{4,40}$"))
     .required()
     .messages({
         "string.empty": "La contraseña no puede estar vacía",
