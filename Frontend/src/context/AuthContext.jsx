@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    
     const token = cookies.get('jwt-auth');
     const storedUser = sessionStorage.getItem('usuario');
     

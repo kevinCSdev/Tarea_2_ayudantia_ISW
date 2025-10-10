@@ -23,15 +23,13 @@ const router = createBrowserRouter([
       },
       {
         path: '/home',
-        element:( 
-        <ProtectedRoute>
+        element: 
           <Home />
-        </ProtectedRoute>)
       }
     ]
   }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+    <RouterProvider router={router} />
 );
