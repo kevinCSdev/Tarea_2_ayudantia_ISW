@@ -18,7 +18,7 @@ const Login = () => {
         if (response.message) {
             setError(response.message);
         } else {
-            navigate('/dashboard');
+            navigate('/home');
         }
     };
     return (
