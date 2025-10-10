@@ -10,7 +10,7 @@ export async function login(dataUser) {
             password
         });
         
-        const { token, user } = response.data.data;
+        const { token, user } = response.data;
         
         cookies.set('jwt-auth', token, { path: '/' });
         sessionStorage.setItem('usuario', JSON.stringify(user));

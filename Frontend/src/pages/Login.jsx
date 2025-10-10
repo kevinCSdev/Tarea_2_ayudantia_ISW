@@ -1,22 +1,25 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/auth.service';
+import useLogin from '../hooks/useLogin';
 
 const Login = () => {
     const navigate = useNavigate();
+
+    const { errorEmail, errorPassword, errorData, handleInputChange } = useLogin();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
         console.log({ email, password });
 
         const response = await login({ email, password });
 
-        if (response.message) {
-            setError(response.message);
+        console.log('Respuesta del backend:', response);
+        
+        if (response.message !== 'Login exitoso') {
+            errorData(response.message);
         } else {
             navigate('/home');
         }
