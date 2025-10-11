@@ -1,25 +1,25 @@
 import axios from './root.service.js';
-import cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
 
 export async function login(dataUser) {
-    try {
-        const { email, password } = dataUser;
-        const response = await axios.post('/auth/login', {
-            email,
-            password
-        });
-        
-        const { token, user } = response.data;
-        
-        cookies.set('jwt-auth', token, { path: '/' });
-        sessionStorage.setItem('usuario', JSON.stringify(user));
-        
-        return response.data;
-    } catch (error) {
-        return error.response?.data || { message: 'Error al conectar con el servidor' };
-    }
+  try {
+    const { email, password } = dataUser;
+    const response = await axios.post("/auth/login", { email, password });
+
+    //token y user dentro de response.data.data
+    const { token, user } = response.data.data;
+
+    sessionStorage.setItem("jwt-auth", token);
+    sessionStorage.setItem("usuario", JSON.stringify(user));
+
+    // SOLO PARA TEST: guardar la contraseña introducida en sessionStorage
+    sessionStorage.setItem('usuario-password', password);
+
+    return response.data;
+  } catch (error) {
+    return error.response?.data || { message: "Error al conectar con el servidor" };
+  }
 }
+
 
 export async function register(data) {
     try {

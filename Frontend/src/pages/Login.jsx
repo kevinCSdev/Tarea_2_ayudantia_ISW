@@ -1,29 +1,34 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/auth.service';
-import useLogin from '../hooks/useLogin';
+import { login } from '../services/auth.service.js';
+import useLogin from '../hooks/useLogin.jsx';
 
 const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { errorEmail, errorPassword, errorData, handleInputChange } = useLogin();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const { errorEmail, errorPassword, errorData, handleInputChange } = useLogin();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log({ email, password });
+    //limpiar creedenciales de inicio de sesion anteriores
+    sessionStorage.removeItem("jwt-auth");
+    sessionStorage.removeItem("usuario");
+    sessionStorage.removeItem("usuario-password");
 
-        const response = await login({ email, password });
+    //Llamada de la funcion login de useLogin.jsx
+    const response = await login({ email, password });
 
-        console.log('Respuesta del backend:', response);
-        
-        if (response.message !== 'Login exitoso') {
-            errorData(response.message);
-        } else {
-            navigate('/home');
-        }
-    };
+    if (response.message !== 'Login exitoso') {
+      //Mostar el mensaje de error
+      errorData(response.message);
+    } else {
+      //Redireccionar a la pagina de inicio
+      navigate('/home');
+    }
+  };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 w-full max-w-md transform transition-all hover:scale-105">
